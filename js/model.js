@@ -5,6 +5,7 @@ var ACTIVITY_DATA_REMOVED_EVENT = 'ACTIVITY_DATA_REMOVED_EVENT';
 
 var GRAPH_SELECTED_EVENT = 'GRAPH_SELECTED_EVENT';
 
+
 /**
  * Represents a single activity data point.
  * @param activityType The type of activity. A string
@@ -15,9 +16,9 @@ var GRAPH_SELECTED_EVENT = 'GRAPH_SELECTED_EVENT';
  * @constructor
  */
 var ActivityData = function(activityType, healthMetricsDict, activityDurationInMinutes) {
-    this.activityType = activityType;
-    this.activityDataDict = healthMetricsDict;
-    this.activityDurationInMinutes = activityDurationInMinutes
+    this.type = activityType;
+    this.data = healthMetricsDict;
+    this.duration = activityDurationInMinutes;
 };
 
 /**
@@ -27,6 +28,8 @@ var ActivityData = function(activityType, healthMetricsDict, activityDurationInM
 var ActivityStoreModel = function() {
     this.activities = [];
     this.listeners = [];
+    this.maxX = 1;
+    this.maxY = 15;
 };
 
 // _ is the Underscore library
@@ -61,7 +64,9 @@ _.extend(ActivityStoreModel.prototype, {
      * @param activityDataPoint
      */
     addActivityDataPoint: function(activityDataPoint) {
-        this.activities.push(activityDataPoint)
+        this.maxX = Math.max(this.maxX, activityDataPoint.duration);
+
+        this.activities.push(activityDataPoint);
         _.each(this.listeners, function(list) {
             list(ACTIVITY_DATA_ADDED_EVENT, new Date(), activityDataPoint);
 
@@ -90,7 +95,37 @@ _.extend(ActivityStoreModel.prototype, {
      */
     getActivityDataPoints: function() {
         return this.activities;
-    }
+    },
+
+    getGroups: function() {
+        return _.groupBy(this.activities, function(act) { return act.type});
+    },
+
+    /**
+     * Returns cumulative druatiosn
+     */
+
+     getDurations: function() {
+        var thing = {};
+        _.each(this.getGroups(), function(group, activity) {
+            thing[activity] = _.reduce(group, function(old, value) {
+                return old + value.duration;
+            }, 0);
+        });
+
+        return thing;
+     },
+
+     getCoordinates: function(activity) {
+        var self = this;
+        var points = _.where(this.activities, {type: activity});
+        return _.map(points, function(point) {
+            return {
+                x: point.duration / self.maxX,
+                y: (point.data.happy + point.data.energy + point.data.stress) / self.maxY
+            };
+        });
+     }
 });
 
 /**
@@ -103,9 +138,15 @@ _.extend(ActivityStoreModel.prototype, {
  * @constructor
  */
 var GraphModel = function() {
-    this.graphs = ["temp"];
+    this.graphs = {
+        'code': false,
+        'crime': false,
+        'world': false,
+        'pancake': false,
+        'russia': false
+    };
     this.listeners = [];
-    this.selected = this.graphs[0];
+    this.selected = 'code';
 };
 
 _.extend(GraphModel.prototype, {
@@ -135,7 +176,7 @@ _.extend(GraphModel.prototype, {
      * Returns a list of graphs (strings) that can be selected by the user
      */
     getAvailableGraphNames: function() {
-        return this.graphs;
+        return _.keys(this.graphs);
     },
 
     /**
@@ -146,14 +187,20 @@ _.extend(GraphModel.prototype, {
         return this.selected;
     },
 
+    getGraphs: function() {
+        return this.graphs;
+    },
+
     /**
      * Changes the currently selected graph to the graph name given. Should
      * broadcast an event to all listeners that the graph changed.
      * @param graphName
      */
     selectGraph: function(graphName) {
-        this.selected = graphName;
-        _.each(this.listeners, function(list) {
+        var self = this;
+        self.selected = graphName;
+        self.graphs[graphName] = !self.graphs[graphName];
+        _.each(self.listeners, function(list) {
             list(GRAPH_SELECTED_EVENT, new Date(), graphName);
 
         })

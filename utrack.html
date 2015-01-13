@@ -8,53 +8,90 @@
 </head>
 <body>
 
-<div id="app_container" class="container">
+<div id="app_container">
 
+  <div class="container">
     <h1 id="header">UTrack!</h1>
-    Track and analyze data that matters to you!
+    <h5>Track and analyze data that matters to you!</h5>
+  </div>
 
-    <div id="input_div" class="col-md-6">
-        <form>
-          <div class="form-group">
-            <label for="activity">Activity</label>
-            <input type="text" class="form-control" id="activity" placeholder="Some Activity">
-          </div>
-          <div class="form-group col-md-4">
-            <label for="energy">Energy Level</label>
-            <input type="text" class="form-control" id="energy" placeholder="(1-5)">
-            <p class="help-block">(1 = exhausted, 5 = very awake)</p>
-          </div>
-          <div class="form-group col-md-4">
-            <label for="stress">Stress Level</label>
-            <input type="text" class="form-control" id="stress" placeholder="(1-5)">
-            <p class="help-block">(1 = very stressed, 5 = very relaxed)</p>
-          </div>
-          <div class="form-group col-md-4">
-            <label for="happy">Happiness Level</label>
-            <input type="text" class="form-control" id="happy" placeholder="(1-5)">
-            <p class="help-block">(1 = depressed, 5 = very happy)</p>
-          </div>
-          <div class="form-group">
-            <label for="time">Time Spent</label>
-            <input type="text" class="form-control" id="time" placeholder="(1-5)">
-          </div>
-          <button type="submit" class="btn btn-default">Submit</button>
-        </form>
+    <div id="dataContainer" class="container">
+      <div id="input">
+          <form name="activityForm" action="javascript:void(0);">
+            <div class="form-group">
+              <label for="activity">Activity</label>
+              <select class="form-control" id="activity" placeholder="Some Activity">
+                <option value="code">Coding</option>
+                <option value="crime">Crime Solving</option>
+                <option value="world">World Domination</option>
+                <option value="panacke">Pancake Making</option>
+                <option value="russia">Invading Russia in Winter</option>
+              </select>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="energy">Energy Level</label>
+              <input id="energy" type="range"  min="0" max="5" value="0" step="1"/>
+              <p class="help-block">(1 = exhausted, 5 = very awake)</p>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="stress">Stress Level</label>
+              <input id="stress" type="range"  min="0" max="5" value="0" step="1"/>
+              <p class="help-block">(1 = very stressed, 5 = very relaxed)</p>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="happy">Happiness Level</label>
+              <input id="happy" type="range"  min="0" max="5" value="0" step="1"/>
+              <p class="help-block">(1 = depressed, 5 = very happy)</p>
+            </div>
+            <div class="form-group">
+              <label for="time">Time Spent</label>
+              <input type="text" class="form-control" id="time" value="0" placeholder="Minutes">
+            </div>
+            <button type="reset" id="addData" class="btn btn-default">Submit</button>
+          </form>
+          <button id="toAnalysis" class="btn btn-default">Analyze</button>
+      </div>
+
+
+      <div id="unit_tests">
+          <a href="unit_tests.html">Run Unit Tests</a>
+      </div>
     </div>
 
-    <div id="analysis_div" class="col-md-6">
-        <div>
-            <canvas id="canvas_demo">
-                If you don't have an HTML5-compatible browser, you'll see this text.
-
-                This canvas object can be removed after you understand canvas basics.
-            </canvas>
-        </div>
-        <button id="run_canvas_demo_button" class="btn btn-primary">Run Canvas Demo</button>
-    </div>
-
-    <div id="unit_tests">
-        <a href="unit_tests.html">Run Unit Tests</a>
+    <div id="graphContainer" class="container hidden">
+      <div class="container col-md-6">
+        <table id="table" class="table table-hover table-bordered">
+          <tr>
+            <th>Activity</th>
+            <th>Time Spent (minutes)</th>
+          </tr>
+          <tr id="code">
+            <td class="name">Coding</td>
+            <td id="code-val">0</td>
+          </tr>
+          <tr id="crime">
+            <td class="name">Crime Solving</td>
+            <td id="crime-val">0</td>
+          </tr>
+          <tr id="world">
+            <td class="name">World Domination</td>
+            <td id="world-val">0</td>
+          </tr>
+          <tr id="pancake">
+            <td class="name">Pancake Making</td>
+            <td id="pancake-val">0</td>
+          </tr>
+          <tr id="russia">
+            <td class="name">Invading Russia in Winter</td>
+            <td id="russia-val">0</td>
+          </tr>
+        </table>
+        <button id="toData" class="btn btn-default">Add Activity</button>
+      </div>
+      <div class="container col-md-6">
+        <canvas id="graph">
+        </canvas>
+      </div>
     </div>
 </div>
 

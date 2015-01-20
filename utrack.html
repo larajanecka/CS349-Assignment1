@@ -10,85 +10,104 @@
 
 <div id="app_container">
 
-  <div class="container">
+  <div id="title" class="container">
     <h1 id="header">UTrack!</h1>
     <h5>Track and analyze data that matters to you!</h5>
   </div>
 
     <div id="dataContainer" class="container">
-      <div id="input">
-          <form name="activityForm" action="javascript:void(0);">
-            <div class="form-group">
-              <label for="activity">Activity</label>
-              <select class="form-control" id="activity" placeholder="Some Activity">
-                <option value="code">Coding</option>
-                <option value="crime">Crime Solving</option>
-                <option value="world">World Domination</option>
-                <option value="panacke">Pancake Making</option>
-                <option value="russia">Invading Russia in Winter</option>
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="energy">Energy Level</label>
-              <input id="energy" type="range"  min="0" max="5" value="0" step="1"/>
-              <p class="help-block">(1 = exhausted, 5 = very awake)</p>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="stress">Stress Level</label>
-              <input id="stress" type="range"  min="0" max="5" value="0" step="1"/>
-              <p class="help-block">(1 = very stressed, 5 = very relaxed)</p>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="happy">Happiness Level</label>
-              <input id="happy" type="range"  min="0" max="5" value="0" step="1"/>
-              <p class="help-block">(1 = depressed, 5 = very happy)</p>
-            </div>
-            <div class="form-group">
-              <label for="time">Time Spent</label>
-              <input type="text" class="form-control" id="time" value="0" placeholder="Minutes">
-            </div>
-            <button type="reset" id="addData" class="btn btn-default">Submit</button>
-          </form>
-          <button id="toAnalysis" class="btn btn-default">Analyze</button>
-      </div>
+      <div class="row">
+        <div id="input" class="col-md-10 view">
+            <form name="activityForm" action="javascript:void(0);">
+              <div class="form-group">
+                <label for="activity">Activity</label>
+                <select class="form-control" id="activity" placeholder="Some Activity">
+                  <option value="code">Coding</option>
+                  <option value="crime">Crime Solving</option>
+                  <option value="world">World Domination</option>
+                  <option value="panacke">Pancake Making</option>
+                  <option value="russia">Invading Russia in Winter</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="energy">Energy Level</label>
+                <input id="energy" type="range"  min="0" max="5" value="0" step="1"/>
+                <span class="left">exhausted</span>
+                <span class="right">very awake</span>
+              </div>
+              <div class="form-group">
+                <label for="stress">Stress Level</label>
+                <input id="stress" type="range"  min="0" max="5" value="0" step="1"/>
+                <span class="left">stressed</span>
+                <span class="right">relaxed</span>
+              </div>
+              <div class="form-group">
+                <label for="happy">Happiness Level</label>
+                <input id="happy" type="range"  min="0" max="5" value="0" step="1"/>
+                <span class="left">sad</span>
+                <span class="right">happy</span>
+              </div>
+              <div class="form-group">
+                <label for="time">Time Spent</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" id="time" value="0" placeholder="Minutes">
+                  <div class="input-group-addon">minutes</div>
+                </div>
+              </div>
+              <button type="reset" id="addData" class="submitButton">Submit</button>
+            </form>
+        </div>
 
+<div id="unit_tests">
+    <a href="unit_tests.html">Run Unit Tests</a>
+</div>
 
-      <div id="unit_tests">
-          <a href="unit_tests.html">Run Unit Tests</a>
+        <div class="col-md-2">
+            <div id="toAnalysis" class="navButton">
+              <span>Analysis</span>
+            </div>
+        </div>
       </div>
     </div>
 
     <div id="graphContainer" class="container hidden">
-      <div class="container col-md-6">
-        <table id="table" class="table table-hover table-bordered">
-          <tr>
-            <th>Activity</th>
-            <th>Time Spent (minutes)</th>
-          </tr>
-          <tr id="code">
-            <td class="name">Coding</td>
-            <td id="code-val">0</td>
-          </tr>
-          <tr id="crime">
-            <td class="name">Crime Solving</td>
-            <td id="crime-val">0</td>
-          </tr>
-          <tr id="world">
-            <td class="name">World Domination</td>
-            <td id="world-val">0</td>
-          </tr>
-          <tr id="pancake">
-            <td class="name">Pancake Making</td>
-            <td id="pancake-val">0</td>
-          </tr>
-          <tr id="russia">
-            <td class="name">Invading Russia in Winter</td>
-            <td id="russia-val">0</td>
-          </tr>
-        </table>
-        <button id="toData" class="btn btn-default">Add Activity</button>
+      <div id="toData" class="navButton">
+        <span>Data</span>
       </div>
-      <div class="container col-md-6">
+      <div id="tableView" class="container col-md-6 view">
+        <caption><em>Hint: click the table rows</em><caption>
+        <table id="table" class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th>Activity</th>
+              <th>Time Spent (minutes)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="code">
+              <td class="name">Coding</td>
+              <td id="code-val">0</td>
+            </tr>
+            <tr id="crime">
+              <td class="name">Crime Solving</td>
+              <td id="crime-val">0</td>
+            </tr>
+            <tr id="world">
+              <td class="name">World Domination</td>
+              <td id="world-val">0</td>
+            </tr>
+            <tr id="pancake">
+              <td class="name">Pancake Making</td>
+              <td id="pancake-val">0</td>
+            </tr>
+            <tr id="russia">
+              <td class="name">Invading Russia in Winter</td>
+              <td id="russia-val">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="graphView" class="container col-md-6 view">
         <canvas id="graph">
         </canvas>
       </div>

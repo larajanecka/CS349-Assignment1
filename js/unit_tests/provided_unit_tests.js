@@ -84,16 +84,77 @@ describe('First unit test', function() {
         var firstListener = sinon.spy();
 
         graphModel.addListener(firstListener);
-        graphModel.selectGraph("MyGraph");
+        graphModel.graphs.push('GraphModel');
+        graphModel.selectGraph("GraphModel");
 
         expect(firstListener.called, 'GraphModel listener should be called').to.be.ok;
-        expect(firstListener.args[0][2], 'GraphModel argument verification').to.equal("MyGraph");
+        expect(firstListener.calledWith('GRAPH_SELECTED_EVENT', sinon.match.any, 'GraphModel'), 'GraphModel argument verification').to.be.true;
 
         var secondListener = sinon.spy();
         graphModel.addListener(secondListener);
-        graphModel.selectGraph("MyGraph");
+        graphModel.selectGraph("GraphModel");
         expect(firstListener.callCount, 'GraphModel first listener should have been called twice').to.equal(2);
         expect(secondListener.called, "GraphModel second listener should have been called").to.be.ok;
     });
+});
 
+describe('Activity Management', function() {
+    var activityModel = new ActivityStoreModel();
+    var health = {
+        happy: 1,
+        energy: 2,
+        stress: 3
+    };
+    var activity = new ActivityData('code', health, 45);
+    var listener = sinon.spy();
+    activityModel.addListener(listener);
+
+    it('Add Activity', function() {
+
+        activityModel.addActivityDataPoint(activity);
+        expect(listener.calledWith('ACTIVITY_DATA_ADDED_EVENT', sinon.match.any, listener));
+
+        expect(activityModel.getActivityDataPoints().length, 'Data should be added').to.equal(1);
+
+    });
+
+    it('Remove Activity', function() {
+
+        activityModel.removeActivityDataPoint(activity);
+        expect(listener.calledWith('ACTIVITY_DATA_REMOVED_EVENT', sinon.match.any, listener));
+        expect(activityModel.getActivityDataPoints().length, 'Data should be added').to.equal(0);
+
+    });
+
+
+});
+
+describe('Activity Helpers', function() {
+    var activityModel = new ActivityStoreModel();
+    var health = {
+        happy: 1,
+        energy: 2,
+        stress: 3
+    };
+    var activity1 = new ActivityData('code', health, 45);
+    var activity2 = new ActivityData('code', health, 45);
+    var activity3 = new ActivityData('russia', health, 45);
+    activityModel.addActivityDataPoint(activity1);
+    activityModel.addActivityDataPoint(activity2);
+    activityModel.addActivityDataPoint(activity3);
+
+    it('Groups', function() {
+        var groups = activityModel.getGroups();
+        expect(groups['code'].length, "Number of code should be 2").to.equal(2);
+    });
+
+    it('Duractions', function() {
+        var durations = activityModel.getDurations();
+        expect(durations['code'], "Code should be 90").to.equal(90);
+    });
+
+    it('Coordinates', function() {
+        var points = activityModel.getCoordinates('code');
+        expect(points[0]["x"], "X should be 1").to.equal(1);
+    });
 });

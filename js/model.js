@@ -138,13 +138,6 @@ _.extend(ActivityStoreModel.prototype, {
  * @constructor
  */
 var GraphModel = function() {
-    this.graphActives = {
-        'code': false,
-        'crime': false,
-        'world': false,
-        'pancake': false,
-        'russia': false
-    };
     this.graphs = ['code', 'crime', 'world', 'pancake', 'russia'];
     this.listeners = [];
     this.selected = 'code';
@@ -200,7 +193,6 @@ _.extend(GraphModel.prototype, {
     selectGraph: function(graphName) {
         var self = this;
         self.selected = graphName;
-        self.graphActives[graphName] = !self.graphActives[graphName];
         _.each(self.listeners, function(list) {
             list(GRAPH_SELECTED_EVENT, new Date(), graphName);
 

@@ -29,12 +29,22 @@ var graphSize = 500;
 var GraphView = function(activityModel, graphModel) {
     this.activities = activityModel;
     this.graphs = graphModel;
+
+    this.graphActives = {
+        'code': false,
+        'crime': false,
+        'world': false,
+        'pancake': false,
+        'russia': false
+    };
 };
 
 _.extend(GraphView.prototype, {
 
     draw: function(eventType, eventTime, eventData) {
         var self = this;
+
+        self.graphActives[eventData] = !self.graphActives[eventData];
 
         graph.width = graphSize + padding;
         graph.height = graphSize + padding;
@@ -61,7 +71,7 @@ _.extend(GraphView.prototype, {
 
         c.fillText("Time Spent on Activity", graphSize / 2, graphSize + 20);
 
-        _.each(self.graphs.getGraphs(), function(graph, graphName) {
+        _.each(self.graphActives, function(graph, graphName) {
             if(graph) {
                 self.drawLine(graphName, c);
             }
@@ -97,3 +107,16 @@ var formatPoint = function(point) {
         y: graphSize - point.y * graphSize
     }
 }
+
+var DateView = function(activityModel) {
+    this.model = activityModel;
+}
+
+_.extend(DateView.prototype, {
+    draw: function(eventType, eventTime, eventData) {
+        var el = document.getElementById("time");
+        el.innerHTML = "Last Updated: " + eventTime;
+    }
+
+
+});

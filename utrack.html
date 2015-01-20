@@ -13,11 +13,12 @@
   <div id="title" class="container">
     <h1 id="header">UTrack!</h1>
     <h5>Track and analyze data that matters to you!</h5>
+    <span id="time">Never Updated</span>
   </div>
 
-    <div id="dataContainer" class="container">
+    <div id="dataContainer" class="container viewContainer">
       <div class="row">
-        <div id="input" class="col-md-10 view">
+        <div id="input" class="view">
             <form name="activityForm" action="javascript:void(0);">
               <div class="form-group">
                 <label for="activity">Activity</label>
@@ -62,7 +63,7 @@
     <a href="unit_tests.html">Run Unit Tests</a>
 </div>
 
-        <div class="col-md-2">
+        <div>
             <div id="toAnalysis" class="navButton">
               <span>Analysis</span>
             </div>
@@ -70,7 +71,7 @@
       </div>
     </div>
 
-    <div id="graphContainer" class="container hidden">
+    <div id="graphContainer" class="container hidden viewContainer">
       <div id="toData" class="navButton">
         <span>Data</span>
       </div>

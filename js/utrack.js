@@ -4,12 +4,13 @@ var ACTIVITIES = new ActivityStoreModel();
 var GRAPHS = new GraphModel();
 var GRAPHVIEW = new GraphView(ACTIVITIES, GRAPHS);
 var TABLEVIEW = new TableView(ACTIVITIES);
-
+var DATEVIEW = new DateView(ACTIVITIES);
 
 
 window.addEventListener('load', function() {
 
     GRAPHS.addListener(_.bind(GRAPHVIEW.draw, GRAPHVIEW));
+    ACTIVITIES.addListener(DATEVIEW.draw);
 
 
     var submit = document.getElementById('addData');
